@@ -1,7 +1,8 @@
 name: enigma
 description: A minimal package for basic cryptographic operations in Dart.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+publish_to: none
+repository: https://github.com/carlosmakin/enigma.git
 
 environment:
   sdk: ^3.1.5
