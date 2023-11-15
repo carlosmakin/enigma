@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:pointycastle/export.dart';
@@ -45,6 +47,64 @@ Uint8List process(Uint8List key, Uint8List iv, Uint8List bytes, bool encrypt) {
     offset += cbc.processBlock(bytes, offset, output, offset);
   }
   assert(offset == bytes.length);
+
+  return output;
+}
+
+Future<Uint8List> processWithIsolates(
+  Uint8List key,
+  Uint8List iv,
+  Uint8List bytes,
+  bool encrypt,
+) async {
+  // Total data length.
+  final int inputLength = bytes.length;
+
+  // Number of isolates to spawn based on the available processors.
+  final int numIsolates = Platform.numberOfProcessors;
+
+  // Threshold based on the number of isolates and 64kb blocks.
+  final int threshold = numIsolates * 64000;
+
+  // Process data without isolates if it's less than or equal to 1MB.
+  if (inputLength <= threshold) return process(key, iv, bytes, encrypt);
+
+  // Data chunk size per isolate, aligned with block size.
+  final int chunkSize = (inputLength / numIsolates).floor();
+  final int adjustedChunkSize = chunkSize - (chunkSize % aesBlockSize);
+
+  // Residual data chunk length to add to last chunk size.
+  final int residualLength = inputLength % (adjustedChunkSize * numIsolates);
+
+  // List of all pending asynchronous isolate processing operations.
+  final List<Future<Uint8List>> isolates = <Future<Uint8List>>[];
+
+  // Data chunk to isolate distribution loop.
+  for (int i = 0; i < numIsolates; i++) {
+    // Calculate where each chunk of data should start and end.
+    final int start = i * adjustedChunkSize;
+    int end = start + adjustedChunkSize;
+
+    // On last chunk add residual chunk length.
+    if (i == numIsolates - 1) end += residualLength;
+
+    // Extract the chunk of data that isolate will work on.
+    final Uint8List chunk = bytes.sublist(start, end);
+    isolates.add(Isolate.run(() => process(key, iv, chunk, encrypt)));
+  }
+
+  // Wait for all isolates to finish processing.
+  final List<Uint8List> results = await Future.wait(isolates);
+
+  // Create output bytes with the same length as the input bytes.
+  final Uint8List output = Uint8List(inputLength);
+
+  // Merge results from all isolates into output byte result.
+  int offset = 0;
+  for (final Uint8List result in results) {
+    output.setRange(offset, offset + result.length, result);
+    offset += result.length;
+  }
 
   return output;
 }

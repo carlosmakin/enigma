@@ -58,6 +58,27 @@ void main() {
   });
 
   group('enigma cryptography', () {
+    test('encrypt and decrypt text', () {
+      const String data = 'Hello world!';
+
+      final Uint8List iv = generateRandomIV();
+
+      final Uint8List aes128Key = generateRandomKey(AESKeyStrength.aes128);
+      final String aes128CipherText = encryptText(key: aes128Key, iv: iv, text: data);
+      final String aes128Data = decryptText(key: aes128Key, cipherText: aes128CipherText);
+      expect(aes128Data, equals(data));
+
+      final Uint8List aes192Key = generateRandomKey(AESKeyStrength.aes192);
+      final String aes192CipherText = encryptText(key: aes192Key, iv: iv, text: data);
+      final String aes192Data = decryptText(key: aes192Key, cipherText: aes192CipherText);
+      expect(aes192Data, equals(data));
+
+      final Uint8List aes256Key = generateRandomKey(AESKeyStrength.aes256);
+      final String aes256CipherText = encryptText(key: aes256Key, iv: iv, text: data);
+      final String aes256Data = decryptText(key: aes256Key, cipherText: aes256CipherText);
+      expect(aes256Data, equals(data));
+    });
+
     test('encrypt and decrypt bytes', () {
       final Uint8List data = Uint8List.fromList(utf8.encode('data'));
 
@@ -79,24 +100,30 @@ void main() {
       expect(aes256Data, equals(data));
     });
 
-    test('encrypt and decrypt text', () {
-      const String data = 'Hello world!';
+    test('encrypt and decrypt bytes with isolates', () async {
+      final Uint8List data = Uint8List.fromList(List<int>.filled(1024 * 1024, 64));
 
       final Uint8List iv = generateRandomIV();
 
       final Uint8List aes128Key = generateRandomKey(AESKeyStrength.aes128);
-      final String aes128CipherText = encryptText(key: aes128Key, iv: iv, text: data);
-      final String aes128Data = decryptText(key: aes128Key, cipherText: aes128CipherText);
+      final Uint8List aes128Cipher =
+          await encryptBytesWithIsolates(key: aes128Key, iv: iv, data: data);
+      final Uint8List aes128Data =
+          await decryptBytesWithIsolates(key: aes128Key, iv: iv, cipher: aes128Cipher);
       expect(aes128Data, equals(data));
 
       final Uint8List aes192Key = generateRandomKey(AESKeyStrength.aes192);
-      final String aes192CipherText = encryptText(key: aes192Key, iv: iv, text: data);
-      final String aes192Data = decryptText(key: aes192Key, cipherText: aes192CipherText);
+      final Uint8List aes192Cipher =
+          await encryptBytesWithIsolates(key: aes192Key, iv: iv, data: data);
+      final Uint8List aes192Data =
+          await decryptBytesWithIsolates(key: aes192Key, iv: iv, cipher: aes192Cipher);
       expect(aes192Data, equals(data));
 
       final Uint8List aes256Key = generateRandomKey(AESKeyStrength.aes256);
-      final String aes256CipherText = encryptText(key: aes256Key, iv: iv, text: data);
-      final String aes256Data = decryptText(key: aes256Key, cipherText: aes256CipherText);
+      final Uint8List aes256Cipher =
+          await encryptBytesWithIsolates(key: aes256Key, iv: iv, data: data);
+      final Uint8List aes256Data =
+          await decryptBytesWithIsolates(key: aes256Key, iv: iv, cipher: aes256Cipher);
       expect(aes256Data, equals(data));
     });
   });
