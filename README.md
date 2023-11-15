@@ -41,6 +41,10 @@ void main() {
 
 For more examples, refer to the `/example` folder in the package.
 
+## Dependencies
+
+- [`pointycastle`](https://pub.dev/packages/pointycastle) - For cryptographic operations.
+
 ## Additional Information
 
 Contributions are welcome. For questions or issues, please open an issue on the repository.
