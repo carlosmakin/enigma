@@ -2,26 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:enigma/src/aes.dart';
 import 'package:pointycastle/export.dart';
-
-/// Enum representing AES key strength.
-///
-/// Each enum value corresponds to a specific key strength for the AES (Advanced Encryption Standard) algorithm.
-/// The AES algorithm can operate with different key strengths, and each key strength provides a different level of security.
-enum AESKeyStrength {
-  /// AES-128: Offers a good balance of strong security and high performance..
-  aes128(16),
-
-  /// AES-192: Provides enhanced security over AES-128, balancing security and performance.
-  aes192(24),
-
-  /// AES-256: Delivers the highest security level among standard AES keys.
-  aes256(32);
-
-  final int numBytes;
-
-  const AESKeyStrength(this.numBytes);
-}
 
 /// Returns a secure random 128-bit initial vector.
 /// The purpose of the IV is to ensure that encrypting the same string with the same key produces

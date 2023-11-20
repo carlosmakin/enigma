@@ -4,5 +4,6 @@
 /// - Encrypt and decrypt data using AES encryption with Cipher Block Chaining (CBC) mode (widely-adopted symmetric encryption standard).
 library enigma;
 
+export 'src/aes.dart';
 export 'src/keygen.dart';
-export 'src/crypto.dart';
+export 'src/operations.dart';

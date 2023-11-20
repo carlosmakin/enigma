@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:enigma/src/base.dart';
+import 'package:enigma/src/aes.dart';
+import 'package:enigma/src/cbc.dart';
 
 /// Returns a base64-encoded cipher from the given plaintext for easier transmission and storage.
 String encryptText({required Uint8List key, required Uint8List iv, required String text}) {
@@ -18,40 +19,40 @@ String decryptText({required Uint8List key, required String cipherText}) {
   );
 }
 
-/// Returns an encrypted cipher from the given data.
+/// Returns encrypted data using AES-CBC mode with the specified key and IV.
 Uint8List encryptBytes({
   required Uint8List key,
   required Uint8List iv,
   required Uint8List data,
 }) {
   final Uint8List paddedBytes = pad(data, aesBlockSize);
-  return process(key, iv, paddedBytes, true);
+  return processAesCbc(key, iv, paddedBytes, true);
 }
 
-/// Returns decrypted data from the given cipher.
+/// Returns decrypted data using AES-CBC mode with the specified key and IV.
 Uint8List decryptBytes({
   required Uint8List key,
   required Uint8List iv,
   required Uint8List cipher,
 }) {
-  return unpad(process(key, iv, cipher, false));
+  return unpad(processAesCbc(key, iv, cipher, false));
 }
 
-/// Returns an encrypted cipher from the given data.
+/// Returns encrypted data using AES-CBC mode with the specified key and IV.
 Future<Uint8List> encryptBytesWithIsolates({
   required Uint8List key,
   required Uint8List iv,
   required Uint8List data,
 }) async {
   final Uint8List paddedBytes = pad(data, aesBlockSize);
-  return processWithIsolates(key, iv, paddedBytes, true);
+  return processAesCbcWithIsolates(key, iv, paddedBytes, true);
 }
 
-/// Returns decrypted data from the given cipher.
+/// Returns decrypted data using AES-CBC mode with the specified key and IV.
 Future<Uint8List> decryptBytesWithIsolates({
   required Uint8List key,
   required Uint8List iv,
   required Uint8List cipher,
 }) async {
-  return unpad(await processWithIsolates(key, iv, cipher, false));
+  return unpad(await processAesCbcWithIsolates(key, iv, cipher, false));
 }
