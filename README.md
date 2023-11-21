@@ -23,6 +23,7 @@ Here's a basic example of using the Enigma package to encrypt and decrypt text:
 import 'package:enigma/enigma.dart';
 
 void main() {
+  // Generate a key and IV
   final Uint8List key = deriveKeyFromPassphrase(
     'passphrase',
     salt: 'com.domain.name',
@@ -31,10 +32,12 @@ void main() {
   );
   final Uint8List iv = generateRandomIV();
 
-  String encrypted = encryptText(key: key, iv: iv, text: "Hello, world!");
+  // Encrypting text
+  final String encrypted = encryptTextWithEmbeddedIV(key: key, iv: iv, text: "Hello, world!");
   print("Encrypted: $encrypted");
 
-  String decrypted = decryptText(key: key, cipherText: encrypted);
+  // Decrypting text
+  final String decrypted = decryptTextWithEmbeddedIV(key: key, text: encrypted);
   print("Decrypted: $decrypted");
 }
 ```
