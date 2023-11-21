@@ -13,10 +13,10 @@ void main() {
   final Uint8List iv = generateRandomIV();
 
   // Encrypting text
-  String encrypted = encryptText(key: key, iv: iv, text: "Hello, world!");
+  final String encrypted = encryptTextWithEmbeddedIV(key: key, iv: iv, text: "Hello, world!");
   print("Encrypted: $encrypted");
 
   // Decrypting text
-  String decrypted = decryptText(key: key, cipherText: encrypted);
+  final String decrypted = decryptTextWithEmbeddedIV(key: key, text: encrypted);
   print("Decrypted: $decrypted");
 }
