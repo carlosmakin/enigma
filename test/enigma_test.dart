@@ -21,8 +21,19 @@ void main() {
     test('derive key from passphrase', () {
       for (final AESKeyStrength strength in AESKeyStrength.values) {
         final Uint8List key =
-            deriveKeyFromPassphrase('password', salt: 'bae', iterations: 1, strength: strength);
+            deriveKeyFromPassphrase('password', iterations: 1, strength: strength);
         expect(key.length, equals(strength.numBytes));
+      }
+    });
+
+    test('derive key from passphrase with salt', () {
+      for (final AESKeyStrength strength in AESKeyStrength.values) {
+        final Uint8List unsaltedKey =
+            deriveKeyFromPassphrase('password', iterations: 1, strength: strength);
+        final Uint8List saltedKey =
+            deriveKeyFromPassphrase('password', salt: 'bae', iterations: 1, strength: strength);
+        expect(saltedKey.length, equals(strength.numBytes));
+        expect(saltedKey, isNot(unsaltedKey));
       }
     });
 

@@ -105,6 +105,7 @@ Future<Uint8List> processAesCbcWithIsolates(
     output.setRange(offset, offset + result.length, result);
     offset += result.length;
   }
+  assert(offset == inputLength);
 
   return output;
 }
