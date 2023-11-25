@@ -4,21 +4,27 @@ import 'dart:typed_data';
 import 'package:enigma/src/aes.dart';
 import 'package:enigma/src/cbc.dart';
 
-/// Returns a base64-encoded ciphertext from the given plaintext for easier transmission and storage.
+/// Encrypts plaintext using AES-CBC mode and returns a base64-encoded ciphertext without embedded IV.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 String encryptText({required Uint8List key, required Uint8List iv, required String text}) {
   return base64.encode(
     encryptBytes(key: key, iv: iv, data: utf8.encode(text) as Uint8List),
   );
 }
 
-/// Returns decrypted plaintext from the given ciphertext.
+/// Decrypts base64-encoded ciphertext without embedded IV using AES-CBC mode and returns the original plaintext.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 String decryptText({required Uint8List key, required Uint8List iv, required String text}) {
   return utf8.decode(
     decryptBytes(key: key, iv: iv, data: base64.decode(text)),
   );
 }
 
-/// Returns a base64-encoded cipher from the given plaintext for easier transmission and storage.
+/// Encrypts plaintext using AES-CBC mode and returns a base64-encoded ciphertext with embedded IV.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 String encryptTextWithEmbeddedIV(
     {required Uint8List key, required Uint8List iv, required String text}) {
   return base64.encode(
@@ -26,14 +32,18 @@ String encryptTextWithEmbeddedIV(
   );
 }
 
-/// Returns decrypted plaintext from the given ciphertext.
+/// Decrypts base64-encoded ciphertext with embedded IV using AES-CBC mode and returns the original plaintext.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 String decryptTextWithEmbeddedIV({required Uint8List key, required String text}) {
   return utf8.decode(
     decryptBytesWithEmbeddedIV(key: key, data: base64.decode(text)),
   );
 }
 
-/// Returns encrypted data using AES-CBC mode with the specified key and IV.
+/// Encrypts data using AES-CBC mode and returns cipher data without embedded IV.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 Uint8List encryptBytes({
   required Uint8List key,
   required Uint8List iv,
@@ -43,7 +53,9 @@ Uint8List encryptBytes({
   return processAesCbc(key, iv, paddedBytes, true);
 }
 
-/// Returns decrypted data using AES-CBC mode with the specified key and IV.
+/// Decrypts cipher without embedded IV using AES-CBC mode and returns the original data.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 Uint8List decryptBytes({
   required Uint8List key,
   required Uint8List iv,
@@ -52,7 +64,9 @@ Uint8List decryptBytes({
   return unpad(processAesCbc(key, iv, data, false));
 }
 
-/// Returns encrypted data using AES-CBC mode with the specified key and IV.
+/// Encrypts data using AES-CBC mode and returns cipher data with embedded IV.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 Uint8List encryptBytesWithEmbeddedIV({
   required Uint8List key,
   required Uint8List iv,
@@ -65,7 +79,9 @@ Uint8List encryptBytesWithEmbeddedIV({
     ..setRange(iv.length, iv.length + cipher.length, cipher);
 }
 
-/// Returns decrypted data using AES-CBC mode with the specified key and embedded IV.
+/// Decrypts cipher with embedded IV using AES-CBC mode and returns the original data.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 Uint8List decryptBytesWithEmbeddedIV({
   required Uint8List key,
   required Uint8List data,
@@ -75,7 +91,9 @@ Uint8List decryptBytesWithEmbeddedIV({
   return unpad(processAesCbc(key, iv, cipher, false));
 }
 
-/// Returns encrypted data using AES-CBC mode with the specified key and IV.
+/// Encrypts data using AES-CBC mode and returns cipher data without embedded IV.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 Future<Uint8List> encryptBytesFast({
   required Uint8List key,
   required Uint8List iv,
@@ -85,7 +103,9 @@ Future<Uint8List> encryptBytesFast({
   return processAesCbcWithIsolates(key, iv, paddedBytes, true);
 }
 
-/// Returns decrypted data using AES-CBC mode with the specified key and IV.
+/// Decrypts cipher without embedded IV using AES-CBC mode and returns the original data.
+///
+/// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 Future<Uint8List> decryptBytesFast({
   required Uint8List key,
   required Uint8List iv,
@@ -94,7 +114,9 @@ Future<Uint8List> decryptBytesFast({
   return unpad(await processAesCbcWithIsolates(key, iv, data, false));
 }
 
-/// Returns encrypted data using AES-CBC mode with the specified key and IV.
+/// Encrypts data using AES-CBC mode and returns cipher data with embedded IV.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 Future<Uint8List> encryptBytesWithEmbeddedIVFast({
   required Uint8List key,
   required Uint8List iv,
@@ -107,7 +129,9 @@ Future<Uint8List> encryptBytesWithEmbeddedIVFast({
     ..setRange(iv.length, iv.length + cipher.length, cipher);
 }
 
-/// Returns decrypted data using AES-CBC mode with the specified key and IV.
+/// Decrypts cipher with embedded IV using AES-CBC mode and returns the original data.
+///
+/// Automatically manages the IV in the encrypted data for seamless encryption and decryption.
 Future<Uint8List> decryptBytesWithEmbeddedIVFast({
   required Uint8List key,
   required Uint8List data,
