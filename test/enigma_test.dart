@@ -52,7 +52,8 @@ void main() {
   group('enigma cryptography', () {
     const String text = 'Hello world!';
     final Uint8List smallBytes = Uint8List.fromList(utf8.encode('data'));
-    final Uint8List largeBytes = Uint8List.fromList(List<int>.filled(1024 * 1024, 64));
+    final Uint8List largeBytes =
+        Uint8List.fromList(List<int>.generate(1024 * 1024 * 100, (int i) => i));
 
     for (final AESKeyStrength strength in AESKeyStrength.values) {
       final Uint8List key = generateRandomKey(strength);

@@ -9,7 +9,7 @@ import 'package:enigma/src/cbc.dart';
 /// Ideal for scenarios where you handle the IV separately and prefer external control over the IV.
 String encryptText({required Uint8List key, required Uint8List iv, required String text}) {
   return base64.encode(
-    encryptBytes(key: key, iv: iv, data: utf8.encode(text) as Uint8List),
+    encryptBytes(key: key, iv: iv, data: utf8.encode(text)),
   );
 }
 
@@ -28,7 +28,7 @@ String decryptText({required Uint8List key, required Uint8List iv, required Stri
 String encryptTextWithEmbeddedIV(
     {required Uint8List key, required Uint8List iv, required String text}) {
   return base64.encode(
-    encryptBytesWithEmbeddedIV(key: key, iv: iv, data: utf8.encode(text) as Uint8List),
+    encryptBytesWithEmbeddedIV(key: key, iv: iv, data: utf8.encode(text)),
   );
 }
 

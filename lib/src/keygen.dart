@@ -45,7 +45,7 @@ Uint8List deriveKeyFromPassphrase(
 }) {
   // Uses PBKDF2 with a SHA-256 HMAC to generate the key.
   final PBKDF2KeyDerivator generator = PBKDF2KeyDerivator(HMac(SHA256Digest(), 64))
-    ..init(Pbkdf2Parameters(utf8.encode(salt) as Uint8List, iterations, strength.numBytes));
+    ..init(Pbkdf2Parameters(utf8.encode(salt), iterations, strength.numBytes));
 
-  return generator.process(utf8.encode(passphrase) as Uint8List);
+  return generator.process(utf8.encode(passphrase));
 }
