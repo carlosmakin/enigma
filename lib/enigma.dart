@@ -5,5 +5,10 @@
 library enigma;
 
 export 'src/aes.dart';
+export 'src/cbc.dart';
+export 'src/chacha.dart';
+export 'src/gcm.dart';
 export 'src/keygen.dart';
-export 'src/simple.dart';
+export 'src/padding.dart';
+export 'src/random.dart';
+export 'src/rsa.dart';

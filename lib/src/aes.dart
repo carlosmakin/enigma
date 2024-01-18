@@ -15,8 +15,8 @@ enum AESKeyStrength {
   /// AES-256: Delivers the highest security level among standard AES keys.
   aes256(256, 32);
 
-  final int numBits;
-  final int numBytes;
+  final int bitLength;
+  final int byteLength;
 
-  const AESKeyStrength(this.numBits, this.numBytes);
+  const AESKeyStrength(this.bitLength, this.byteLength);
 }
