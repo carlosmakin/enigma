@@ -173,8 +173,6 @@ Future<void> downloadAndDecryptFile(String url, Uint8List key, Uint8List nonce, 
 }
 ```
 
-For more examples, refer to the `/example` folder in the package.
-
 ## Dependencies
 
 - [`pointycastle`](https://pub.dev/packages/pointycastle) - For cryptographic operations.
