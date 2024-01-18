@@ -1,5 +1,3 @@
-
-
 ## Enigma Dart Package
 
 A minimal package for basic cryptographic operations in Dart.
