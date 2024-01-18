@@ -20,5 +20,6 @@ Uint8List pad(Uint8List bytes, int blockSizeBytes) {
 
 /// Returns the source data that is unpadded.
 Uint8List unpad(Uint8List padded) {
-  return padded.sublist(0, padded.length - PKCS7Padding().padCount(padded));
+  final int padCount = PKCS7Padding().padCount(padded);
+  return Uint8List.view(padded.buffer, 0, padded.length - padCount);
 }
