@@ -12,6 +12,14 @@ import 'package:pointycastle/export.dart';
 /// encryption operation with the same key.
 Uint8List generateRandomIV() => _getSecureRandom.nextBytes(16);
 
+/// Generates a secure random byte array of a specified length.
+///
+/// This function is essential for cryptographic operations where random data is required.
+/// It uses a secure random number generator to produce a byte array of the specified length.
+/// The `length` parameter allows flexibility in the size of the generated data, making it suitable
+/// for various cryptographic needs like keys, salts, or nonces.
+Uint8List generateRandomBytes(int length) => _getSecureRandom.nextBytes(length);
+
 /// /// Returns a secure random key based on the specified AES key strength.
 /// - This function generates a cryptographic key of a length corresponding to the AES key strength provided.
 /// - The `aesKeyStrength` parameter determines the strength of the key generated, supporting AES-128, AES-192, or AES-256.
