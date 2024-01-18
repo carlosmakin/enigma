@@ -6,4 +6,4 @@ library enigma;
 
 export 'src/aes.dart';
 export 'src/keygen.dart';
-export 'src/operations.dart';
+export 'src/simple.dart';
