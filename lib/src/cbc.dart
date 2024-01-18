@@ -5,21 +5,18 @@ import 'dart:typed_data';
 import 'package:enigma/src/aes.dart';
 import 'package:pointycastle/export.dart';
 
-/// Encrypts data using AES-CBC mode with the specified key, IV, and mode (encrypt/decrypt).
+/// Encrypts data using AES-CBC mode with the specified key, and IV.
 Uint8List encryptAesCbc(Uint8List key, Uint8List iv, Uint8List bytes) {
   // Assert that the input lengths are valid.
   assert(<int>[128, 192, 256].contains(key.length * 8));
   assert(128 == iv.length * 8);
   assert(bytes.length % aesBlockSize == 0);
 
-  // Creates a CBC block cipher with AES, and initializes it with the key and IV.
   final CBCBlockCipher cbc = CBCBlockCipher(AESEngine())
     ..init(true, ParametersWithIV<CipherParameters?>(KeyParameter(key), iv));
 
-  // Allocates space for the output result.
   final Uint8List output = Uint8List(bytes.length);
 
-  // Processes the bytes block-by-block.
   int offset = 0;
   while (offset < bytes.length) {
     offset += cbc.processBlock(bytes, offset, output, offset);
@@ -29,21 +26,18 @@ Uint8List encryptAesCbc(Uint8List key, Uint8List iv, Uint8List bytes) {
   return output;
 }
 
-/// Decrypts data using AES-CBC mode with the specified key, IV, and mode (encrypt/decrypt).
+/// Decrypts data using AES-CBC mode with the specified key, and IV.
 Uint8List decryptAesCbc(Uint8List key, Uint8List iv, Uint8List bytes) {
   // Assert that the input lengths are valid.
   assert(<int>[128, 192, 256].contains(key.length * 8));
   assert(128 == iv.length * 8);
   assert(bytes.length % aesBlockSize == 0);
 
-  // Creates a CBC block cipher with AES, and initializes it with the key and IV.
   final CBCBlockCipher cbc = CBCBlockCipher(AESEngine())
     ..init(false, ParametersWithIV<CipherParameters?>(KeyParameter(key), iv));
 
-  // Allocates space for the output result.
   final Uint8List output = Uint8List(bytes.length);
 
-  // Processes the bytes block-by-block.
   int offset = 0;
   while (offset < bytes.length) {
     offset += cbc.processBlock(bytes, offset, output, offset);

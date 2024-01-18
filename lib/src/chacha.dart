@@ -7,14 +7,10 @@ Uint8List encryptChaCha20(Uint8List key, Uint8List nonce, Uint8List data) {
   assert(key.length == 32);
   assert(nonce.length == 12);
 
-  // Initialize ChaCha20 cipher
   final ChaCha7539Engine chacha = ChaCha7539Engine()
     ..init(true, ParametersWithIV<KeyParameter>(KeyParameter(key), nonce));
 
-  // Create buffer for output
   final Uint8List output = Uint8List(data.length);
-
-  // Process the data
   chacha.processBytes(data, 0, data.length, output, 0);
 
   return output;
@@ -26,14 +22,10 @@ Uint8List decryptChaCha20(Uint8List key, Uint8List nonce, Uint8List data) {
   assert(key.length == 32);
   assert(nonce.length == 12);
 
-  // Initialize ChaCha20 cipher
   final ChaCha7539Engine chacha = ChaCha7539Engine()
     ..init(false, ParametersWithIV<KeyParameter>(KeyParameter(key), nonce));
 
-  // Create buffer for output
   final Uint8List output = Uint8List(data.length);
-
-  // Process the data
   chacha.processBytes(data, 0, data.length, output, 0);
 
   return output;
@@ -45,7 +37,6 @@ Uint8List encryptChaCha20Poly1305(Uint8List key, Uint8List nonce, Uint8List data
   assert(key.length == 32);
   assert(nonce.length == 12);
 
-  // Initialize ChaCha20-Poly1305 cipher
   final ChaCha20Poly1305 chacha = ChaCha20Poly1305(ChaCha7539Engine(), Poly1305())
     ..init(true, AEADParameters<KeyParameter>(KeyParameter(key), 128, nonce, aad ?? Uint8List(0)));
 
@@ -58,7 +49,6 @@ Uint8List decryptChaCha20Poly1305(Uint8List key, Uint8List nonce, Uint8List data
   assert(key.length == 32);
   assert(nonce.length == 12);
 
-  // Initialize ChaCha20-Poly1305 cipher
   final ChaCha20Poly1305 chacha = ChaCha20Poly1305(ChaCha7539Engine(), Poly1305())
     ..init(false, AEADParameters<KeyParameter>(KeyParameter(key), 128, nonce, aad ?? Uint8List(0)));
 
