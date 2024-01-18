@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:enigma/src/aes.dart';
 import 'package:enigma/src/cbc.dart';
+import 'package:enigma/src/padding.dart';
 
 /// Encrypts plaintext using AES-CBC mode and returns a base64-encoded ciphertext without embedded IV.
 ///
