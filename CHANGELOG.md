@@ -1,6 +1,6 @@
 ## 3.0.0
 
-#### New Features:
+### New Features:
 1. **RSA Cryptography**: 
    - Introduced RSA key generation, encryption, decryption, signing, and verification functions.
    - Supports RSA key strengths: RSA-2048, RSA-3072, RSA-4096.
@@ -19,19 +19,19 @@
 5. **Code Organization**:
    - Refactored and better organized cryptographic functions for improved readability and maintainability.
 
-#### Breaking Changes:
+### Breaking Changes:
 - Removed functions: `encryptText`, `decryptText`, `encryptTextWithEmbeddedIV`, and `decryptTextWithEmbeddedIV`.
 - Removed functions: `encryptBytes`, `decryptBytes`, `encryptBytesWithEmbeddedIV`, and `decryptBytesWithEmbeddedIV`.
 - Removed functions: `encryptBytesFast`, `decryptBytesFast`, `encryptBytesWithEmbeddedIVFast`, and `decryptBytesWithEmbeddedIVFast`.
 - Removed splitting/joining of IV and cipher data in base64-encoded strings.
 
-#### General Improvements:
+### General Improvements:
 - Enhanced clarity and consistency in function naming and code documentation.
 - Expanded descriptions and usage examples for better user guidance.
 
 ## 2.0.0
 
-#### Modified Functions:
+### Modified Functions:
 1. **`encryptText`** and **`decryptText`**:
    - Updated to return base64-encoded ciphertext directly from `encryptBytes` and plaintext directly from `decryptBytes`, respectively.
    - Removed splitting and joining of IV and cipher data in the base64-encoded string.
@@ -43,7 +43,7 @@
    - Renamed for clarity and to reflect performance improvements.
    - Functionality remains unchanged.
 
-#### Added Functions:
+### Added Functions:
 1. **`encryptTextWithEmbeddedIV`** and **`decryptTextWithEmbeddedIV`**:
    - Newly added functions to handle text encryption/decryption where IV is embedded within the cipher data.
 
