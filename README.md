@@ -135,9 +135,7 @@ Stream<Uint8List> decryptStreamingData(Stream<Uint8List> encryptedStream, Uint8L
   int nonceCounter = 0;
   return encryptedStream.map((data) {
     final updatedNonce = updateNonce(nonce, nonceCounter++);
-    return decryptChaCha20(key, updatedNonce
-
-, data);
+    return decryptChaCha20(key, updatedNonce, data);
   });
 }
 
