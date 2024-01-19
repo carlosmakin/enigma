@@ -32,7 +32,12 @@ Uint8List decryptChaCha20(Uint8List key, Uint8List nonce, Uint8List data) {
 }
 
 /// Encrypts data using ChaCha20-Poly1305 as specified in RFC 7539.
-Uint8List encryptChaCha20Poly1305(Uint8List key, Uint8List nonce, Uint8List data, Uint8List? aad) {
+Uint8List encryptChaCha20Poly1305(
+  Uint8List key,
+  Uint8List nonce,
+  Uint8List data, [
+  Uint8List? aad,
+]) {
   // Validate key and nonce lengths (256 bits for key, 96 bits for nonce)
   assert(key.length == 32);
   assert(nonce.length == 12);
@@ -44,7 +49,12 @@ Uint8List encryptChaCha20Poly1305(Uint8List key, Uint8List nonce, Uint8List data
 }
 
 /// Decrypts data using ChaCha20-Poly1305 as specified in RFC 7539.
-Uint8List decryptChaCha20Poly1305(Uint8List key, Uint8List nonce, Uint8List data, Uint8List? aad) {
+Uint8List decryptChaCha20Poly1305(
+  Uint8List key,
+  Uint8List nonce,
+  Uint8List data, [
+  Uint8List? aad,
+]) {
   // Validate key and nonce lengths (256 bits for key, 96 bits for nonce)
   assert(key.length == 32);
   assert(nonce.length == 12);

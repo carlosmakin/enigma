@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 
 /// Encrypts data using AES-GCM mode with the specified key, nonce, and AAD.
-Uint8List encryptAesGcm(Uint8List key, Uint8List nonce, Uint8List bytes, Uint8List? aad) {
+Uint8List encryptAesGcm(Uint8List key, Uint8List nonce, Uint8List bytes, [Uint8List? aad]) {
   // Assert that the input lengths are valid.
   assert(<int>[128, 192, 256].contains(key.length * 8));
   assert(nonce.length <= 12); // nonce should not exceed 12 bytes for GCM.
@@ -15,7 +15,7 @@ Uint8List encryptAesGcm(Uint8List key, Uint8List nonce, Uint8List bytes, Uint8Li
 }
 
 /// Decrypts data using AES-GCM mode with the specified key, nonce, and AAD.
-Uint8List decryptAesGcm(Uint8List key, Uint8List nonce, Uint8List bytes, Uint8List? aad) {
+Uint8List decryptAesGcm(Uint8List key, Uint8List nonce, Uint8List bytes, [Uint8List? aad]) {
   // Assert that the input lengths are valid.
   assert(<int>[128, 192, 256].contains(key.length * 8));
   assert(nonce.length <= 12); // nonce should not exceed 12 bytes for GCM.
