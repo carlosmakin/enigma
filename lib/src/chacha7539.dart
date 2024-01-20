@@ -162,9 +162,9 @@ Uint8List chacha20Rfc7539(Uint8List key, Uint8List nonce, Uint8List data, [int c
   final Uint8List outputData = Uint8List(dataSize);
 
   for (int j = 0; j < dataSize / 64; ++j) {
-    Uint8List keyStream = chacha20Block(key, counter + j, nonce);
-    int blockStart = j * 64;
-    int blockEnd = blockStart + 64;
+    final Uint8List keyStream = chacha20Block(key, counter + j, nonce);
+    final int blockStart = j * 64;
+    final int blockEnd = blockStart + 64;
 
     for (int i = blockStart; i < blockEnd && i < dataSize; ++i) {
       outputData[i] = data[i] ^ keyStream[i - blockStart];
@@ -172,8 +172,8 @@ Uint8List chacha20Rfc7539(Uint8List key, Uint8List nonce, Uint8List data, [int c
   }
 
   if (dataSize % 64 != 0) {
-    Uint8List keyStream = chacha20Block(key, counter + (dataSize / 64).floor(), nonce);
-    int blockStart = (dataSize / 64).floor() * 64;
+    final Uint8List keyStream = chacha20Block(key, counter + (dataSize / 64).floor(), nonce);
+    final int blockStart = (dataSize / 64).floor() * 64;
 
     for (int i = blockStart; i < dataSize; ++i) {
       outputData[i] = data[i] ^ keyStream[i - blockStart];
