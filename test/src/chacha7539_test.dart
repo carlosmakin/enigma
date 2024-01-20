@@ -84,7 +84,7 @@ void main() {
     final Uint8List nonce = parseColonSeparatedHexString(nonceHexString);
 
     final Uint8List input = parseBlockHexString(inputHexString);
-    final Uint8List output = chacha20Rfc7539(key, nonce, input);
+    final Uint8List output = chacha20(key, nonce, input);
     final Uint8List expected = parseBlockHexString(outputhexString);
 
     expect(output, equals(expected));
