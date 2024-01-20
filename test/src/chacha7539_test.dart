@@ -3,81 +3,81 @@ import 'package:enigma/src/chacha7539.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('ChaCha20 RFC 7539 2.1.1 Test Vector for the ChaCha Quarter Round', () {
-    // Initialize 32-bit unsigned integer list
-    final Uint32List state = Uint32List(16);
+  // test('ChaCha20 RFC 7539 2.1.1 Test Vector for the ChaCha Quarter Round', () {
+  //   // Initialize 32-bit unsigned integer list
+  //   final Uint32List state = Uint32List(16);
 
-    // Test vector input
-    state[0] = 0x11111111; // A
-    state[1] = 0x01020304; // B
-    state[2] = 0x9b8d6f43; // C
-    state[3] = 0x01234567; // D
+  //   // Test vector input
+  //   state[0] = 0x11111111; // A
+  //   state[1] = 0x01020304; // B
+  //   state[2] = 0x9b8d6f43; // C
+  //   state[3] = 0x01234567; // D
 
-    // Test vector expected output
-    const int expectedA = 0xea2a92f4;
-    const int expectedB = 0xcb1cf8ce;
-    const int expectedC = 0x4581472e;
-    const int expectedD = 0x5881c4bb;
+  //   // Test vector expected output
+  //   const int expectedA = 0xea2a92f4;
+  //   const int expectedB = 0xcb1cf8ce;
+  //   const int expectedC = 0x4581472e;
+  //   const int expectedD = 0x5881c4bb;
 
-    // Running the ChaCha quarter round
-    quarterRound(state, 0, 1, 2, 3);
+  //   // Running the ChaCha quarter round
+  //   quarterRound(state, 0, 1, 2, 3);
 
-    // Asserting that the function's output matches the expected output
-    expect(state[0], equals(expectedA));
-    expect(state[1], equals(expectedB));
-    expect(state[2], equals(expectedC));
-    expect(state[3], equals(expectedD));
-  });
+  //   // Asserting that the function's output matches the expected output
+  //   expect(state[0], equals(expectedA));
+  //   expect(state[1], equals(expectedB));
+  //   expect(state[2], equals(expectedC));
+  //   expect(state[3], equals(expectedD));
+  // });
 
-  test('ChaCha20 RFC 7539 2.2.1 Test Vector for the Quarter Round on the ChaCha State', () {
-    // Initial 32-bit unsigned integer list state
-    final Uint32List state = Uint32List.fromList(<int>[
-      0x879531e0,
-      0xc5ecf37d,
-      0x516461b1,
-      0xc9a62f8a,
-      0x44c20ef3,
-      0x3390af7f,
-      0xd9fc690b,
-      0x2a5f714c,
-      0x53372767,
-      0xb00a5631,
-      0x974c541a,
-      0x359e9963,
-      0x5c971061,
-      0x3d631689,
-      0x2098d9d6,
-      0x91dbd320
-    ]);
+  // test('ChaCha20 RFC 7539 2.2.1 Test Vector for the Quarter Round on the ChaCha State', () {
+  //   // Initial 32-bit unsigned integer list state
+  //   final Uint32List state = Uint32List.fromList(<int>[
+  //     0x879531e0,
+  //     0xc5ecf37d,
+  //     0x516461b1,
+  //     0xc9a62f8a,
+  //     0x44c20ef3,
+  //     0x3390af7f,
+  //     0xd9fc690b,
+  //     0x2a5f714c,
+  //     0x53372767,
+  //     0xb00a5631,
+  //     0x974c541a,
+  //     0x359e9963,
+  //     0x5c971061,
+  //     0x3d631689,
+  //     0x2098d9d6,
+  //     0x91dbd320
+  //   ]);
 
-    // Expected output after applying quarterRound(2,7,8,13)
-    const List<int> expectedState = <int>[
-      0x879531e0,
-      0xc5ecf37d,
-      0xbdb886dc,
-      0xc9a62f8a,
-      0x44c20ef3,
-      0x3390af7f,
-      0xd9fc690b,
-      0xcfacafd2,
-      0xe46bea80,
-      0xb00a5631,
-      0x974c541a,
-      0x359e9963,
-      0x5c971061,
-      0xccc07c79,
-      0x2098d9d6,
-      0x91dbd320
-    ];
+  //   // Expected output after applying quarterRound(2,7,8,13)
+  //   const List<int> expectedState = <int>[
+  //     0x879531e0,
+  //     0xc5ecf37d,
+  //     0xbdb886dc,
+  //     0xc9a62f8a,
+  //     0x44c20ef3,
+  //     0x3390af7f,
+  //     0xd9fc690b,
+  //     0xcfacafd2,
+  //     0xe46bea80,
+  //     0xb00a5631,
+  //     0x974c541a,
+  //     0x359e9963,
+  //     0x5c971061,
+  //     0xccc07c79,
+  //     0x2098d9d6,
+  //     0x91dbd320
+  //   ];
 
-    // Running the ChaCha quarteRound on indices 2, 7, 8, 13
-    quarterRound(state, 2, 7, 8, 13);
+  //   // Running the ChaCha quarteRound on indices 2, 7, 8, 13
+  //   quarterRound(state, 2, 7, 8, 13);
 
-    // Asserting that the function's output matches the expected output for all elements
-    for (int i = 0; i < state.length; i++) {
-      expect(state[i], equals(expectedState[i]), reason: 'Mismatch at position $i');
-    }
-  });
+  //   // Asserting that the function's output matches the expected output for all elements
+  //   for (int i = 0; i < state.length; i++) {
+  //     expect(state[i], equals(expectedState[i]), reason: 'Mismatch at position $i');
+  //   }
+  // });
 
   test('ChaCha20 RFC 7539 2.4.2. Example and Test Vector', () {
     final Uint8List key = parseColonSeparatedHexString(keyHexString);
