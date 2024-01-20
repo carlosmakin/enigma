@@ -123,21 +123,27 @@ void chacha20BlockRounds(Uint32List state) {
 /// - A 32-bit block count parameter, treated as a 32-bit little-endian integer.
 ///
 ///The output is 64 random-looking bytes.
-Uint8List chacha20Block(Uint8List key, int counter, Uint8List nonce) {
-  assert(key.length == 32, 'Invalid key');
-  assert(nonce.length == 12, 'Invalid nonce');
-
+Uint32List chacha20Block(Uint32List key, int counter, Uint32List nonce) {
   // final buffer = ByteBuffer (64);
   final Uint32List state = Uint32List(16);
 
   // Initialize the state with the constants, key, counter, and nonce
-  state[0] = 0x61707865;
-  state[1] = 0x3320646e;
-  state[2] = 0x79622d32;
-  state[3] = 0x6b206574;
-  state.setAll(4, key.buffer.asUint32List());
+  state[00] = 0x61707865;
+  state[01] = 0x3320646e;
+  state[02] = 0x79622d32;
+  state[03] = 0x6b206574;
+  state[04] = key[0];
+  state[05] = key[1];
+  state[06] = key[2];
+  state[07] = key[3];
+  state[08] = key[4];
+  state[09] = key[5];
+  state[10] = key[6];
+  state[11] = key[7];
   state[12] = counter;
-  state.setAll(13, nonce.buffer.asUint32List());
+  state[13] = nonce[0];
+  state[14] = nonce[1];
+  state[15] = nonce[2];
 
   // Flip endianness only if the system is big-endian
   ensureLittleEndian(state);
@@ -153,32 +159,57 @@ Uint8List chacha20Block(Uint8List key, int counter, Uint8List nonce) {
     workingState[i] = (workingState[i] + state[i]);
   }
 
-  return workingState.buffer.asUint8List();
+  return workingState;
 }
 
 /// Encrypts or decrypts data using the ChaCha20 algorithm as specified in RFC 7539.
-Uint8List chacha20Rfc7539(Uint8List key, Uint8List nonce, Uint8List data, [int counter = 1]) {
-  final int dataSize = data.length;
-  final Uint8List outputData = Uint8List(dataSize);
+Uint8List chacha20(Uint8List key, Uint8List nonce, Uint8List data, [int counter = 1]) {
+  assert(key.length == 32, 'Invalid key');
+  assert(nonce.length == 12, 'Invalid nonce');
 
-  for (int j = 0; j < dataSize / 64; ++j) {
-    final Uint8List keyStream = chacha20Block(key, counter + j, nonce);
-    final int blockStart = j * 64;
-    final int blockEnd = blockStart + 64;
+  final int dataSize = data.lengthInBytes;
+  final Uint32List key32Bit = Uint32List.view(key.buffer);
+  final Uint32List nonce32Bit = Uint32List.view(nonce.buffer);
 
-    for (int i = blockStart; i < blockEnd && i < dataSize; ++i) {
-      outputData[i] = data[i] ^ keyStream[i - blockStart];
+  final ByteData outputBytes = ByteData(dataSize);
+
+  final Uint32List outputData = Uint32List.view(outputBytes.buffer);
+  final Uint32List inputData = Uint32List.view(data.buffer);
+
+  final int blocks = dataSize ~/ 64;
+  for (int i = 0; i < blocks; ++i) {
+    final Uint32List keyStream = chacha20Block(key32Bit, counter + i, nonce32Bit);
+    final int blockStartInts = i * 16;
+
+    for (int j = 0; j < 16; ++j) {
+      outputData[blockStartInts + j] = inputData[blockStartInts + j] ^ keyStream[j];
     }
   }
 
   if (dataSize % 64 != 0) {
-    final Uint8List keyStream = chacha20Block(key, counter + (dataSize / 64).floor(), nonce);
-    final int blockStart = (dataSize / 64).floor() * 64;
+    final Uint32List keyStream = chacha20Block(key32Bit, counter + blocks, nonce32Bit);
+    final int blockStartInts = blocks * 16;
+    final int remainingBytes = dataSize % 64;
+    final int fullInts = remainingBytes ~/ 4; // Number of full 32-bit integers
+    final int extraBytes = remainingBytes % 4; // Number of extra bytes after full 32-bit integers
 
-    for (int i = blockStart; i < dataSize; ++i) {
-      outputData[i] = data[i] ^ keyStream[i - blockStart];
+    // Process full 32-bit integers
+    for (int i = 0; i < fullInts; i++) {
+      outputData[blockStartInts + i] = inputData[blockStartInts + i] ^ keyStream[i];
+    }
+
+    // Process any extra bytes
+    if (extraBytes > 0) {
+      final int startExtraByteIndex = blockStartInts * 4 + fullInts * 4;
+      for (int i = 0; i < extraBytes; i++) {
+        final int byteIndex = startExtraByteIndex + i;
+        outputBytes.setUint8(
+          byteIndex,
+          data[byteIndex] ^ keyStream.buffer.asUint8List()[fullInts * 4 + i],
+        );
+      }
     }
   }
 
-  return outputData;
+  return outputBytes.buffer.asUint8List();
 }
