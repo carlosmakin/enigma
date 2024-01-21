@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:enigma/src/chacha7539.dart';
+import 'package:enigma/src/chacha20.dart';
 import 'package:test/test.dart';
 
 void main() {
