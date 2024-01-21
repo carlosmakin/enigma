@@ -32,7 +32,7 @@ void clamp(Uint8List r) {
   r[12] &= 252;
 }
 
-// Poly1305 MAC function as per RFC 8439
+/// Poly1305 MAC function algorithm as specified in RFC 8439
 Uint8List poly1305Mac(Uint8List msg, Uint8List key) {
   final Uint8List rBytes = key.sublist(0, 16);
   clamp(rBytes);
