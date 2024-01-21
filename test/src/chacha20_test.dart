@@ -3,32 +3,6 @@ import 'package:enigma/src/chacha20.dart';
 import 'package:test/test.dart';
 
 void main() {
-  // test('ChaCha20 RFC 7539 2.1.1 Test Vector for the ChaCha Quarter Round', () {
-  //   // Initialize 32-bit unsigned integer list
-  //   final Uint32List state = Uint32List(16);
-
-  //   // Test vector input
-  //   state[0] = 0x11111111; // A
-  //   state[1] = 0x01020304; // B
-  //   state[2] = 0x9b8d6f43; // C
-  //   state[3] = 0x01234567; // D
-
-  //   // Test vector expected output
-  //   const int expectedA = 0xea2a92f4;
-  //   const int expectedB = 0xcb1cf8ce;
-  //   const int expectedC = 0x4581472e;
-  //   const int expectedD = 0x5881c4bb;
-
-  //   // Running the ChaCha quarter round
-  //   quarterRound(state, 0, 1, 2, 3);
-
-  //   // Asserting that the function's output matches the expected output
-  //   expect(state[0], equals(expectedA));
-  //   expect(state[1], equals(expectedB));
-  //   expect(state[2], equals(expectedC));
-  //   expect(state[3], equals(expectedD));
-  // });
-
   // test('ChaCha20 RFC 7539 2.2.1 Test Vector for the Quarter Round on the ChaCha State', () {
   //   // Initial 32-bit unsigned integer list state
   //   final Uint32List state = Uint32List.fromList(<int>[
