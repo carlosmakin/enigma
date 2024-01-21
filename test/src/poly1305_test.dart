@@ -4,7 +4,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('ChaCha20 RFC 7539 2.5.2. Poly1305 Example and Test Vector', () {
-    print(parseColonSeparatedHexString('01:03:80:8a:fb:0d:b2:fd:4a:bf:f6:af:41:49:f5:1b'));
     final Uint8List key = parseColonSeparatedHexString(keyHexString);
     final Uint8List message = parseBlockHexString(messageHexString);
 
