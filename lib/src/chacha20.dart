@@ -161,7 +161,7 @@ Uint8List chacha20Block(Uint32List key, int counter, Uint32List nonce) {
   return workingState.buffer.asUint8List();
 }
 
-/// Encrypts or decrypts data using the ChaCha20 algorithm as specified in RFC 7539.
+/// Encrypts or decrypts data using the ChaCha20 algorithm as specified in RFC 8439
 Uint8List chacha20(Uint8List key, Uint8List nonce, Uint8List data, [int counter = 1]) {
   assert(key.length == 32, 'Invalid key');
   assert(nonce.length == 12, 'Invalid nonce');
