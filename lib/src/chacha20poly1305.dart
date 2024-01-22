@@ -10,7 +10,7 @@ Uint8List poly1305KeyGen(Uint8List key, Uint8List nonce) {
   return chacha20Block(key.buffer.asUint32List(), 0, nonce.buffer.asUint32List()).sublist(0, 32);
 }
 
-/// Encrypts data using ChaCha20 and authenticates with Poly1305 as specified in RFC 7539.
+/// Encrypts data using ChaCha20 and authenticates with Poly1305 as specified in RFC 8439
 Uint8List chacha20Poly1305Encrypt(
   Uint8List key,
   Uint8List nonce,
@@ -23,7 +23,7 @@ Uint8List chacha20Poly1305Encrypt(
   // Encrypt the data using ChaCha20
   final Uint8List ciphertext = chacha20(key, nonce, data, 1);
 
-  // Create the Poly1305 message for MAC calculation
+  // Create the Poly1305 message for MAC tag calculation
   aad ??= Uint8List(0);
   final int padLen = (16 - (data.length % 16)) % 16;
   final int aadPadLen = (16 - (aad.length % 16)) % 16;
@@ -45,8 +45,8 @@ Uint8List chacha20Poly1305Encrypt(
   final Uint8List tag = poly1305Mac(macData, otk);
 
   // The output from the AEAD is the concatenation of:
-  // - A ciphertext of the same length as the plaintext.
-  // - A 128-bit tag, which is the output of the Poly1305 function.
+  // - A ciphertext of the same length as the plaintext
+  // - A 128-bit tag, which is the output of the Poly1305 function
   final Uint8List result = Uint8List(ciphertext.length + 16);
   result.setAll(0, ciphertext);
   result.setAll(ciphertext.length, tag);
@@ -54,6 +54,7 @@ Uint8List chacha20Poly1305Encrypt(
   return result;
 }
 
+/// Decrypts data using ChaCha20 and authenticates with Poly1305 as specified in RFC 8439
 Uint8List chacha20Poly1305Decrypt(
   Uint8List key,
   Uint8List nonce,
@@ -64,12 +65,12 @@ Uint8List chacha20Poly1305Decrypt(
     throw Exception('Invalid encrypted data length.');
   }
 
+  // Generate the Poly1305 one-time-key using the ChaCha20 block function with a counter of 0
+  final Uint8List otk = poly1305KeyGen(key, nonce);
+
   // Separate the encrypted data and the MAC tag
   final Uint8List ciphertext = Uint8List.view(data.buffer, 0, data.length - 16);
   final Uint8List tag = Uint8List.view(data.buffer, data.length - 16);
-
-  // Generate the Poly1305 one-time-key using the ChaCha20 block function with a counter of 0
-  final Uint8List otk = poly1305KeyGen(key, nonce);
 
   // Recreate the Poly1305 message for MAC tag verification
   aad ??= Uint8List(0);
