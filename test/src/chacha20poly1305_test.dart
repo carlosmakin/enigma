@@ -5,9 +5,9 @@ import 'package:test/test.dart';
 typedef Poly1305KeyGenTestVector = Map<String, String>;
 
 void main() {
-  for (int i = 1; i <= testVectors.length; i++) {
+  for (int i = 0; i < testVectors.length; i++) {
     final Poly1305KeyGenTestVector testVector = testVectors[i];
-    test('Poly1305 Key Generation Using ChaCha20 Test Vector $i', () {
+    test('Poly1305 Key Generation Using ChaCha20 Test Vector ${(i + 1)}', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List nonce = parseBlockHexString(testVector['nonce']!);
 
