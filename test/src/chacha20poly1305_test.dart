@@ -9,7 +9,7 @@ typedef Poly1305KeyGenTestVector = Map<String, String>;
 void main() {
   for (int i = 0; i < poly1305KeyGenTestVectors.length; i++) {
     final Poly1305KeyGenTestVector testVector = poly1305KeyGenTestVectors[i];
-    test('Poly1305 Key Generation Using ChaCha20 Test Vector ${(i + 1)}', () {
+    test('Poly1305 Key Generation Using ChaCha20 Test Vector $i', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List nonce = parseBlockHexString(testVector['nonce']!);
 
@@ -22,6 +22,18 @@ void main() {
 }
 
 const List<Poly1305KeyGenTestVector> poly1305KeyGenTestVectors = <Poly1305KeyGenTestVector>[
+  // Test Vector #0
+  <String, String>{
+    'key': '''
+      80 81 82 83 84 85 86 87 88 89 8a 8b 8c 8d 8e 8f 
+      90 91 92 93 94 95 96 97 98 99 9a 9b 9c 9d 9e 9f
+      ''',
+    'nonce': '00 00 00 00 00 01 02 03 04 05 06 07',
+    'otk': '''
+      8a d5 a0 8b 90 5f 81 cc 81 50 40 27 4a b2 94 71 
+      a8 33 b6 37 e3 fd 0d a5 08 db b8 e2 fd d1 a6 46
+      ''',
+  },
   // Test Vector #1
   <String, String>{
     'key': '''
