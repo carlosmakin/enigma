@@ -7,7 +7,7 @@ typedef Poly1305TestVector = Map<String, String>;
 void main() {
   for (int i = 0; i < testVectors.length; i++) {
     final Poly1305TestVector testVector = testVectors[i];
-    test('Poly1305 Test Vector $i', () {
+    test('Poly1305 Message Authentication Code Test Vector $i', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List message = parseBlockHexString(testVector['message']!);
 
