@@ -164,8 +164,9 @@ Uint8List chacha20Block(Uint32List key, int counter, Uint32List nonce) {
 
 /// Encrypts or decrypts data using the ChaCha20 algorithm as specified in RFC 8439
 Uint8List chacha20(Uint8List key, Uint8List nonce, Uint8List data, [int counter = 1]) {
-  assert(key.length == 32, 'Invalid key');
-  assert(nonce.length == 12, 'Invalid nonce');
+  if (key.length != 32) throw ArgumentError('Invalid key');
+  if (nonce.length != 12) throw ArgumentError('Invalid nonce');
+  if (data.length >= 274877906880) throw ArgumentError('Maximum size reached');
 
   final int dataSize = data.lengthInBytes;
   final Uint8List output = Uint8List(dataSize);
