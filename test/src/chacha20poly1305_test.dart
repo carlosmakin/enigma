@@ -7,8 +7,8 @@ import 'parser.dart';
 typedef Poly1305KeyGenTestVector = Map<String, String>;
 
 void main() {
-  for (int i = 0; i < testVectors.length; i++) {
-    final Poly1305KeyGenTestVector testVector = testVectors[i];
+  for (int i = 0; i < poly1305KeyGenTestVectors.length; i++) {
+    final Poly1305KeyGenTestVector testVector = poly1305KeyGenTestVectors[i];
     test('Poly1305 Key Generation Using ChaCha20 Test Vector ${(i + 1)}', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List nonce = parseBlockHexString(testVector['nonce']!);
@@ -21,7 +21,7 @@ void main() {
   }
 }
 
-const List<Poly1305KeyGenTestVector> testVectors = <Poly1305KeyGenTestVector>[
+const List<Poly1305KeyGenTestVector> poly1305KeyGenTestVectors = <Poly1305KeyGenTestVector>[
   // Test Vector #1
   <String, String>{
     'key':

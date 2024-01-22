@@ -7,8 +7,8 @@ import 'parser.dart';
 typedef Poly1305MacTestVector = Map<String, String>;
 
 void main() {
-  for (int i = 0; i < testVectors.length; i++) {
-    final Poly1305MacTestVector testVector = testVectors[i];
+  for (int i = 0; i < poly1305MacTestVectors.length; i++) {
+    final Poly1305MacTestVector testVector = poly1305MacTestVectors[i];
     test('Poly1305 Message Authentication Code Test Vector $i', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List message = parseBlockHexString(testVector['message']!);
@@ -21,7 +21,7 @@ void main() {
   }
 }
 
-const List<Poly1305MacTestVector> testVectors = <Poly1305MacTestVector>[
+const List<Poly1305MacTestVector> poly1305MacTestVectors = <Poly1305MacTestVector>[
   // Test Vector #0
   <String, String>{
     'key':

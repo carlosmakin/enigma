@@ -8,4 +8,4 @@ pubspec.lock
 
 .DS_Store
 
-.experimental
+test/experimental

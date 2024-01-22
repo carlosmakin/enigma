@@ -7,8 +7,8 @@ import 'parser.dart';
 typedef Chacha20TestVector = Map<String, dynamic>;
 
 void main() {
-  for (int i = 0; i < testVectors.length; i++) {
-    final Chacha20TestVector testVector = testVectors[i];
+  for (int i = 0; i < chaha20BlockTestVectors.length; i++) {
+    final Chacha20TestVector testVector = chaha20BlockTestVectors[i];
     test('The ChaCha20 Block Functions Test Vector ${(i + 1)}', () {
       final Uint32List key = parseBlockHexString(testVector['key']!).buffer.asUint32List();
       final Uint32List nonce = parseBlockHexString(testVector['nonce']!).buffer.asUint32List();
@@ -22,7 +22,7 @@ void main() {
   }
 }
 
-const List<Chacha20TestVector> testVectors = <Chacha20TestVector>[
+const List<Chacha20TestVector> chaha20BlockTestVectors = <Chacha20TestVector>[
   // Test Vector #1
   <String, dynamic>{
     'key':

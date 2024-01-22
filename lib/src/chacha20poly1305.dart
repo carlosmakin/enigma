@@ -11,7 +11,7 @@ Uint8List poly1305KeyGen(Uint8List key, Uint8List nonce) {
 }
 
 /// Encrypts data using ChaCha20 and authenticates with Poly1305 as specified in RFC 7539.
-Uint8List chacha20Poly1305Rfc7539Encrypt(
+Uint8List chacha20Poly1305Encrypt(
   Uint8List key,
   Uint8List nonce,
   Uint8List data, [
@@ -49,7 +49,7 @@ Uint8List chacha20Poly1305Rfc7539Encrypt(
   return result;
 }
 
-Uint8List chacha20Poly1305Rfc7539Decrypt(
+Uint8List chacha20Poly1305Decrypt(
   Uint8List key,
   Uint8List nonce,
   Uint8List encryptedDataWithMac, [
