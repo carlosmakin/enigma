@@ -17,34 +17,39 @@ Uint8List chacha20Poly1305Encrypt(
   Uint8List data, [
   Uint8List? aad,
 ]) {
-  // Encrypt the data using ChaCha20
-  final Uint8List encryptedData = chacha20(key, nonce, data);
+  // Generate the Poly1305 one-time-key using the ChaCha20 block function with a counter of 0
+  final Uint8List otk = poly1305KeyGen(key, nonce);
 
-  // Generate the Poly1305 key using the ChaCha20 block function with a counter of 0
-  final Uint8List poly1305Key = poly1305KeyGen(key, nonce);
+  // Encrypt the data using ChaCha20
+  final Uint8List ciphertext = chacha20(key, nonce, data, 1);
 
   // Create the Poly1305 message for MAC calculation
   aad ??= Uint8List(0);
   final int padLen = (16 - (data.length % 16)) % 16;
   final int aadPadLen = (16 - (aad.length % 16)) % 16;
-  final Uint8List macData = Uint8List(aad.length + aadPadLen + encryptedData.length + padLen + 16);
+
+  final Uint8List macData = Uint8List(aad.length + aadPadLen + ciphertext.length + padLen + 16);
   macData.setAll(0, aad);
-  macData.setAll(aad.length + aadPadLen, encryptedData);
+  macData.setAll(aad.length + aadPadLen, ciphertext);
+
   final ByteData lenData = ByteData(16);
   lenData.setUint64(0, aad.length, Endian.little);
   lenData.setUint64(8, data.length, Endian.little);
+
   macData.setAll(
-    aad.length + aadPadLen + encryptedData.length + padLen,
+    aad.length + aadPadLen + ciphertext.length + padLen,
     lenData.buffer.asUint8List(),
   );
 
-  // Calculate the MAC using Poly1305
-  Uint8List mac = poly1305Mac(macData, poly1305Key);
+  // Calculate the MAC tag using Poly1305
+  final Uint8List tag = poly1305Mac(macData, otk);
 
-  // Append the MAC to the encrypted data
-  Uint8List result = Uint8List(encryptedData.length + mac.length);
-  result.setAll(0, encryptedData);
-  result.setAll(encryptedData.length, mac);
+  // The output from the AEAD is the concatenation of:
+  // - A ciphertext of the same length as the plaintext.
+  // - A 128-bit tag, which is the output of the Poly1305 function.
+  final Uint8List result = Uint8List(ciphertext.length + 16);
+  result.setAll(0, ciphertext);
+  result.setAll(ciphertext.length, tag);
 
   return result;
 }
@@ -52,42 +57,43 @@ Uint8List chacha20Poly1305Encrypt(
 Uint8List chacha20Poly1305Decrypt(
   Uint8List key,
   Uint8List nonce,
-  Uint8List encryptedDataWithMac, [
+  Uint8List data, [
   Uint8List? aad,
 ]) {
-  if (encryptedDataWithMac.length < 16) {
+  if (data.length < 16) {
     throw Exception('Invalid encrypted data length.');
   }
 
-  // Separate the encrypted data and the MAC
-  int macStartIndex = encryptedDataWithMac.length - 16;
-  Uint8List encryptedData = encryptedDataWithMac.sublist(0, macStartIndex);
-  Uint8List mac = encryptedDataWithMac.sublist(macStartIndex);
+  // Separate the encrypted data and the MAC tag
+  final Uint8List ciphertext = Uint8List.view(data.buffer, 0, data.length - 16);
+  final Uint8List tag = Uint8List.view(data.buffer, data.length - 16);
 
-  // Generate the Poly1305 key using the ChaCha20 block function with a counter of 0
-  Uint8List poly1305Key = poly1305KeyGen(key, nonce);
+  // Generate the Poly1305 one-time-key using the ChaCha20 block function with a counter of 0
+  final Uint8List otk = poly1305KeyGen(key, nonce);
 
-  // Recreate the Poly1305 message for MAC verification
+  // Recreate the Poly1305 message for MAC tag verification
   aad ??= Uint8List(0);
-  int padLen = (16 - (encryptedData.length % 16)) % 16;
-  int aadPadLen = (16 - (aad.length % 16)) % 16;
-  Uint8List macData = Uint8List(aad.length + aadPadLen + encryptedData.length + padLen + 16);
+  final int padLen = (16 - (ciphertext.length % 16)) % 16;
+  final int aadPadLen = (16 - (aad.length % 16)) % 16;
+
+  final Uint8List macData = Uint8List(aad.length + aadPadLen + ciphertext.length + padLen + 16);
   macData.setAll(0, aad);
-  macData.setAll(aad.length + aadPadLen, encryptedData);
-  ByteData lenData = ByteData(16);
+  macData.setAll(aad.length + aadPadLen, ciphertext);
+
+  final ByteData lenData = ByteData(16);
   lenData.setUint64(0, aad.length, Endian.little);
-  lenData.setUint64(8, encryptedData.length, Endian.little);
+  lenData.setUint64(8, ciphertext.length, Endian.little);
+
   macData.setAll(
-    aad.length + aadPadLen + encryptedData.length + padLen,
+    aad.length + aadPadLen + ciphertext.length + padLen,
     lenData.buffer.asUint8List(),
   );
 
-  // Calculate and verify the MAC
-  final Uint8List calculatedMac = poly1305Mac(macData, poly1305Key);
-  if (!secureEquals(mac, calculatedMac)) {
+  // Calculate and verify the MAC tag
+  if (!secureEquals(tag, poly1305Mac(macData, otk))) {
     throw Exception('MAC verification failed.');
   }
 
   // Decrypt the data using ChaCha20
-  return chacha20(key, nonce, encryptedData);
+  return chacha20(key, nonce, ciphertext);
 }
