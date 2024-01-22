@@ -127,6 +127,7 @@ void chacha20BlockRounds(Uint32List state) {
 Uint8List chacha20Block(Uint32List key, int counter, Uint32List nonce) {
   // Initialize the state with the constants, key, counter, and nonce
   final Uint32List state = Uint32List(16);
+
   state[0] = 0x61707865;
   state[1] = 0x3320646e;
   state[2] = 0x79622d32;
