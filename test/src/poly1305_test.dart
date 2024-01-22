@@ -2,11 +2,11 @@ import 'dart:typed_data';
 import 'package:enigma/src/poly1305.dart';
 import 'package:test/test.dart';
 
-typedef Poly1305TestVector = Map<String, String>;
+typedef Poly1305MacTestVector = Map<String, String>;
 
 void main() {
   for (int i = 0; i < testVectors.length; i++) {
-    final Poly1305TestVector testVector = testVectors[i];
+    final Poly1305MacTestVector testVector = testVectors[i];
     test('Poly1305 Message Authentication Code Test Vector $i', () {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List message = parseBlockHexString(testVector['message']!);
@@ -30,7 +30,7 @@ Uint8List parseBlockHexString(String hexString) {
   );
 }
 
-const List<Poly1305TestVector> testVectors = <Poly1305TestVector>[
+const List<Poly1305MacTestVector> testVectors = <Poly1305MacTestVector>[
   // Test Vector #0
   <String, String>{
     'key':
