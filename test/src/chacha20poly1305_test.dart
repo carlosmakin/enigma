@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'package:enigma/src/chacha20poly1305.dart';
 import 'package:test/test.dart';
 
+import 'parser.dart';
+
 typedef Poly1305KeyGenTestVector = Map<String, String>;
 
 void main() {
@@ -17,17 +19,6 @@ void main() {
       expect(otk, equals(expected));
     });
   }
-}
-
-Uint8List parseBlockHexString(String hexString) {
-  final String continuousHex = hexString.replaceAll(RegExp(r'\s+'), '');
-  final List<String> hexBytes = <String>[];
-  for (int i = 0; i < continuousHex.length; i += 2) {
-    hexBytes.add(continuousHex.substring(i, i + 2));
-  }
-  return Uint8List.fromList(
-    hexBytes.map((String byte) => int.parse(byte, radix: 16)).toList(),
-  );
 }
 
 const List<Poly1305KeyGenTestVector> testVectors = <Poly1305KeyGenTestVector>[

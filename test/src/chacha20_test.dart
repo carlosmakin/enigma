@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'package:enigma/src/chacha20.dart';
 import 'package:test/test.dart';
 
+import 'parser.dart';
+
 typedef Chacha20TestVector = Map<String, dynamic>;
 
 void main() {
@@ -18,17 +20,6 @@ void main() {
       expect(keyStream, equals(expected));
     });
   }
-}
-
-Uint8List parseBlockHexString(String hexString) {
-  final String continuousHex = hexString.replaceAll(RegExp(r'\s+'), '');
-  final List<String> hexBytes = <String>[];
-  for (int i = 0; i < continuousHex.length; i += 2) {
-    hexBytes.add(continuousHex.substring(i, i + 2));
-  }
-  return Uint8List.fromList(
-    hexBytes.map((String byte) => int.parse(byte, radix: 16)).toList(),
-  );
 }
 
 const List<Chacha20TestVector> testVectors = <Chacha20TestVector>[
