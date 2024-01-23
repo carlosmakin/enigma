@@ -12,12 +12,12 @@ void main() {
     test('The ChaCha20 Block Functions Test Vector ${(i + 1)}', () {
       final Uint32List key = parseBlockHexString(testVector['key']!).buffer.asUint32List();
       final Uint32List nonce = parseBlockHexString(testVector['nonce']!).buffer.asUint32List();
-      final int counter = testVector['counter']! as int;
+      final int counter = testVector['counter']!;
 
-      final Uint8List keyStream = chacha20Block(key, counter, nonce);
+      final Uint8List result = chacha20Block(key, counter, nonce);
       final Uint8List expected = parseBlockHexString(testVector['keyStream']!);
 
-      expect(keyStream, equals(expected));
+      expect(result, equals(expected));
     });
   }
 
@@ -27,12 +27,12 @@ void main() {
       final Uint8List key = parseBlockHexString(testVector['key']!);
       final Uint8List nonce = parseBlockHexString(testVector['nonce']!);
       final Uint8List plaintext = parseBlockHexString(testVector['plaintext']!);
-      final int counter = testVector['counter']! as int;
+      final int counter = testVector['counter']!;
 
-      final Uint8List keyStream = chacha20(key, nonce, plaintext, counter);
+      final Uint8List result = chacha20(key, nonce, plaintext, counter);
       final Uint8List expected = parseBlockHexString(testVector['ciphertext']!);
 
-      expect(keyStream, equals(expected));
+      expect(result, equals(expected));
     });
   }
 }
